@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>React Color Changer</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      #root {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A8', '#FFFF33'];
+
+      function App() {
+        const [colorIndex, setColorIndex] = React.useState(0);
+
+        React.useEffect(() => {
+          const interval = setInterval(() => {
+            setColorIndex((prev) => (prev + 1) % colors.length);
+          }, 2000); // 5 seconds
+
+          return () => clearInterval(interval);
+        }, []);
+
+        return (
+          <div
+            style={{
+              backgroundColor: colors[colorIndex],
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: '#fff',
+              fontSize: '2rem',
+              fontFamily: 'sans-serif',
+              transition: 'background-color 1s ease',
+            }}
+          >
+            Color changes every 5 seconds!
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
