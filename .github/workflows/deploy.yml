@@ -1,4 +1,4 @@
-name: Deploy Static Site to EC2
+name: Deploy Static HTML Site to EC2
 
 on:
   push:
@@ -14,40 +14,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build React project
-        run: |
-          npm install
-          npm run build
-
-      - name: Copy build files to EC2 temp folder
+      - name: Upload static files to EC2 temporary folder
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "build/*"
+          source: "*"
           target: "/home/ec2-user/deploy-temp"
 
-      - name: Move files to Nginx and custom project root
+      - name: Deploy to both target directories
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Clear existing content
+            # Clean old files
             sudo rm -rf /usr/share/nginx/html/*
             rm -rf /home/ec2-user/colorChangerSJL/*
 
-            # Copy to both locations
+            # Copy new files to both locations
             sudo cp -r /home/ec2-user/deploy-temp/* /usr/share/nginx/html/
             cp -r /home/ec2-user/deploy-temp/* /home/ec2-user/colorChangerSJL/
 
             # Fix permissions
             sudo chown -R nginx:nginx /usr/share/nginx/html
 
-            # Restart server
+            # Restart nginx
             sudo systemctl restart nginx
 
-            # Log deployment
+            # Log time
             echo "Deployment at $(date)" >> ~/deploy.log
