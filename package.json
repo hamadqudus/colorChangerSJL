@@ -4,7 +4,8 @@
   "description": "A simple React color changer served statically",
   "main": "index.html",
   "scripts": {
-    "start": "http-server -p 4010"
+    "start": "http-server -p 4010",
+    "build": "react-scripts build"
   },
   "author": "Your Name",
   "license": "MIT",
