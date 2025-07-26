@@ -1,4 +1,4 @@
-name: Deploy React App to EC2
+name: Deploy Static Site to EC2
 
 on:
   push:
@@ -14,25 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build React app
-        run: npm run build
-
-      - name: Copy files to EC2 server
+      - name: Copy HTML file to EC2 server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "build/*"
-          target: "/home/ec2-user/react-app"
+          source: "index.html"
+          target: "/home/ec2-user/colorChangerSJL" # adjust if needed
 
       - name: SSH and restart nginx
         uses: appleboy/ssh-action@v1.0.0
@@ -51,6 +40,3 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo "Deployment at $(date)" >> ~/deploy.log
-
-      - name: Notify deployment success
-        run: echo "Deployment to EC2 successful!"
