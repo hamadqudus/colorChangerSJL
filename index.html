@@ -29,7 +29,7 @@
         React.useEffect(() => {
           const interval = setInterval(() => {
             setColorIndex((prev) => (prev + 1) % colors.length);
-          }, 2000); // 5 seconds
+          }, 2000); // 2 seconds
 
           return () => clearInterval(interval);
         }, []);
@@ -48,7 +48,7 @@
               transition: 'background-color 1s ease',
             }}
           >
-            Color changes every 5 seconds!
+            Color changes every 2 seconds!
           </div>
         );
       }
