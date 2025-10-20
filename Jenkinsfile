@@ -18,5 +18,5 @@ pipeline {
                 echo 'Deploying the application...'
             }
         }
-    } // <--- End of 'stages' section
+    }
 }
