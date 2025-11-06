@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    environment {
+        // Use the ENV_TYPE parameter to dynamically set the environment
+        ENV_TYPE = dev
+    }
     stages { // <--- This is the required 'stages' wrapper section
         stage('Build') {
             steps {
